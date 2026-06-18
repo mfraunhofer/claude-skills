@@ -1,6 +1,6 @@
 ---
 name: handover
-description: Write a handover file when a chat gets too long or you want to continue work in a fresh session, and search past handovers when you remember an earlier topic. Two modes — Create and Search. Use when the user says "/handover", "write me a handover", "this chat is getting too long, let's continue in a new one", "let's pick this up tomorrow", "I want to be able to continue this later". Search mode when the user says "find the handover where we discussed X", "didn't we talk about Y a few days ago, find that handover", "we had a handover about Z", "find last week's handover". NOT for: permanent notes (use memory), project status (use a status file), or plan files.
+description: Write a handover file when a chat gets too long or you want to continue work in a fresh session, and search past handovers when you remember an earlier topic. Two modes — Create and Search. Use when the user says "/handover", "write me a handover", "this chat is getting too long, let's continue in a new one", "let's pick this up tomorrow", "I want to be able to continue this later". Search mode when the user says "find the handover where we discussed X", "didn't we talk about Y a few days ago, find that handover", "we had a handover about Z", "find last week's handover". NOT for permanent notes (use memory), project status, or plan files.
 argument-hint: "What should the next session focus on? (optional)"
 ---
 
