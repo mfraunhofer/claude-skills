@@ -1,0 +1,17 @@
+# llms.txt — optional last-mile touch.
+#
+# Honest assessment (as of 2026): low priority. No major provider is known to read
+# llms.txt in the citation pipeline. Schema + real content + (for local) a Google
+# Business Profile matter far more. Do this only after Phase 0–2 + GBP. NAP/facts
+# must be exact (invent nothing).
+
+# <Business name> — <one line: what + where>
+
+> <2–3 sentences: core offering, specialty, location, phone, opening hours.
+> Factual, no marketing fluff.>
+
+## Key pages
+- [Home & services](https://DOMAIN/)
+- [<Core service 1>](https://DOMAIN/<slug-1>)
+- [<Core service 2>](https://DOMAIN/<slug-2>)
+- [FAQ](https://DOMAIN/#faq)
