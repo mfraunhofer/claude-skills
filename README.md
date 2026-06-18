@@ -10,6 +10,9 @@ Each skill is a self-contained folder with a `SKILL.md`. Claude loads it automat
 |---|---|
 | [`handover`](./handover) | Write a handover file when a chat gets too long or you want to continue in a fresh session — and search past handovers when you remember an earlier topic. |
 | [`check-domain`](./check-domain) | Check whether a domain is available via a direct `whois` lookup against the official registrars (.de / .com / .eu / .org / .net). |
+| [`usage-dashboard`](./usage-dashboard) | Local token-usage dashboard for Claude Code — parses your session transcripts and renders a self-contained HTML report with a USD cost equivalent. |
+| [`pitch`](./pitch) | Turn a fuzzy idea into a structured Feature Pitch (pitch.md) via 6 guided questions, before any deeper planning or PRD step. |
+| [`pm`](./pm) | Project-management dispatcher for running parallel issue/spawn chats through a single state file — overview only, never touches code. |
 
 ## Install
 
