@@ -9,6 +9,7 @@ Each skill is a self-contained folder with a `SKILL.md`. Claude loads it automat
 | Skill | What it does |
 |---|---|
 | [`handover`](./handover) | Write a handover file when a chat gets too long or you want to continue in a fresh session — and search past handovers when you remember an earlier topic. |
+| [`check-domain`](./check-domain) | Check whether a domain is available via a direct `whois` lookup against the official registrars (.de / .com / .eu / .org / .net). |
 
 ## Install
 
