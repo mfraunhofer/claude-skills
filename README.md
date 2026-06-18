@@ -12,14 +12,18 @@ Each skill is a self-contained folder with a `SKILL.md`. Claude loads it automat
 
 ## Install
 
-Copy any skill folder into your personal skills directory:
+Grab a single skill straight into your personal skills directory — no clone, just that folder:
 
 ```bash
-# personal (available in every project)
-cp -r handover ~/.claude/skills/
+npx degit --force mfraunhofer/claude-skills/handover ~/.claude/skills/handover
+```
 
-# or project-scoped (checked into a single repo)
-cp -r handover .claude/skills/
+Or clone the whole repo and copy what you want:
+
+```bash
+git clone https://github.com/mfraunhofer/claude-skills.git
+cp -r claude-skills/handover ~/.claude/skills/      # personal — available in every project
+# or: cp -r claude-skills/handover .claude/skills/   # project-scoped
 ```
 
 That's it. Start a new Claude Code session and the skill is live — trigger it with the phrases listed in its `SKILL.md` description (e.g. `/handover`).
