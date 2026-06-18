@@ -14,14 +14,14 @@ Single source of truth for the PM chat. **When a new PM chat starts: read this f
 
 ## How you + the PM chat work
 
-**Core principle:** the PM chat does ONLY project management — maintain state, give the overview, write instructions. Code edits, issue thinking, research and status-sync edits run in **spawn chats** (which the PM chat prepares as prompt text; you open the new chat).
+**Core principle:** the PM chat does ONLY project management — maintain state, keep the overview, write the next wave, and hand out dispatch prompts. All real work (code, issue thinking, research) runs in **spawn chats**, which always report back through the **PM inbox** (`<workspace>/.scratch/pm-inbox/`).
 
-1. You kick off issues in their own chats (spawn-chat pattern).
-2. When a spawn/issue chat is done, you paste its closing report into the PM chat.
-3. The PM chat updates this file (active table + worktree section + logbook) and names the next action.
+1. The PM chat plans and writes the next wave directly — a queue of issues plus a short dispatch prompt for each.
+2. You open each issue in its own spawn chat. The spawn chat does the work and writes its closing report to the **PM inbox**.
+3. The PM chat reads the inbox, updates this file (active table + worktree section + logbook), and names the next action.
 4. The PM chat actively says "you can close the chat for issue X" once the PR is merged + the worktree is empty.
 
-**What the PM chat does itself:** maintain pm-state.md · recap · high-level wave plan · cleanup commands as text · spawn prompts as text.
+**What the PM chat does itself:** maintain pm-state.md · recap · write the next wave (queue + dispatch prompts) · cleanup commands as text · read + integrate the PM inbox.
 
 **What the PM chat NEVER does** (belongs in spawn chats): edit issue files / index files / code · research · TDD / implementation / audits / reviews · dig deep into issue contents.
 
@@ -56,8 +56,8 @@ Single source of truth for the PM chat. **When a new PM chat starts: read this f
 |---|---|
 | "recap" / "status?" / "where are we?" | gives a recap |
 | "cleanup" / "clear everything" / "phase X GO" | builds a cleanup command |
-| "prompt for #N" / "spawn prompt for …" | builds a spawn prompt |
-| "wave plan" / "next wave" | proposes a wave plan |
+| "prompt for #N" / "dispatch #N" | builds the dispatch (mini-)prompt pointing at the issue file |
+| "wave plan" / "next wave" | writes the next wave directly (queue + dispatch prompts) |
 | (report from a spawn chat) | updates state + names the next step |
 
 ---

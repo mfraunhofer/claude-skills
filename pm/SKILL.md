@@ -1,30 +1,31 @@
 ---
 name: pm
-description: Project-management chat skill for running parallel issue/spawn chats. Tracks them through a state file (`<workspace>/.scratch/pm-state.md`). The PM chat is pure overview — it never edits files except pm-state.md itself; the spawn chats do the actual work. Use when the user says "/pm", "status [project]", "recap", "what's next?", "where are we on [project]?", "pm status", or pastes a report from a spawn/issue chat that triggers a status change. NOT for deep issue thinking, code edits, research, TDD, or reviews (all spawn-chat work).
+description: Project-management chat skill that coordinates parallel issue/spawn chats through a shared PM inbox. Two layers — a PM chat that keeps the overview, writes the next wave of work directly, and hands out short dispatch prompts; and spawn chats that do all the work and always report back via the inbox. The PM chat is pure overview — it never edits files except its own state file (`<workspace>/.scratch/pm-state.md`). Use when the user says "/pm", "status [project]", "recap", "what's next?", "where are we on [project]?", "pm status", or pastes a report from a spawn/issue chat. NOT for deep issue thinking, code edits, research, TDD, or reviews (all spawn-chat work).
 ---
 
 # pm — Project-Management Dispatcher
 
 ## Core principle
 
-On complex projects you work in **three chat layers in parallel**:
+On complex projects you work in **two chat layers**:
 
-1. **PM chat** (this skill): maintains `<workspace>/.scratch/pm-state.md`, gives the overview, writes instructions. Stays open for a long time.
-2. **Planner chat**: kicks off one wave/batch of work after another. Stays open.
-3. **Spawn / issue chats**: do the actual work (code, edits, research, TDD). Short-lived, closed once the PR is merged.
+1. **PM chat** (this skill): maintains `<workspace>/.scratch/pm-state.md`, keeps the overview, **plans and writes the next wave of work directly** (a queue of issues), and hands out short dispatch prompts. Stays open for a long time.
+2. **Spawn / issue chats**: do all the actual work (code, edits, research, TDD) and **always write their result back to the PM inbox**. Short-lived, closed once the PR is merged.
+
+The backbone is the **PM inbox**: spawn chats report into it, the PM chat reads and integrates from it. That one-way channel — spawn → inbox → PM — is what keeps the overview correct without the PM chat ever touching code. Getting this spawn↔PM communication right is the most important part of the skill.
 
 **Critical:** the PM chat must NEVER edit issue files, index files, or code, and never run research. Otherwise its context balloons and the whole advantage is gone.
 
-When a task needs file edits / code / research: the PM chat produces a **spawn prompt** as text output, the user drops it into a new chat tab, the spawn chat executes, and the user brings the report back.
+When a task needs file edits / code / research: the PM chat produces a **dispatch prompt** as text output, the user drops it into a new chat tab, the spawn chat executes, and reports back through the inbox.
 
 ## What the PM chat **may** do
 
 - Edit `<workspace>/.scratch/pm-state.md`
 - Read `<workspace>/.scratch/pm-inbox/*.md` and move them to `pm-inbox/_archive/`
 - Give recaps / status synthesis in the chat
-- Propose a wave plan at a high level (which issues, in what order)
+- Plan and write the next wave directly — the queue of issues plus the dispatch prompts to run them
 - Produce cleanup commands as text output (the user pastes them into a terminal)
-- Produce spawn prompts as text output (the user pastes them into a new chat)
+- Produce dispatch prompts as text output — minimal "mini-prompts" that point at the issue file (the user pastes them into a new chat)
 - Run `gh pr list` / `git log` / `git worktree list` / `git branch` as a read-only source for auto-resync
 
 ## What the PM chat **never** does
@@ -32,8 +33,7 @@ When a task needs file edits / code / research: the PM chat produces a **spawn p
 - Edit issue files / index files / code (except pm-state.md itself)
 - Research, web lookups, WebFetch
 - TDD / implementation / audits / reviews
-- Dig deep into issue contents ("what needs to go into issue 13")
-- Detailed wave planning (that's the planner's job)
+- Dig deep into issue contents ("what needs to go into issue 13") — that's a spawn chat's job; the PM chat lists the issues and dispatches them, it doesn't write their specs
 
 ## State-file schema
 
@@ -113,9 +113,9 @@ When a task needs file edits / code / research: `You: open a spawn chat` with an
 | "inbox" / "read reports" | reads `pm-inbox/*.md`, integrates into state, archives |
 | "report from the other chat" + a spawn-output quote | mandatory inbox check BEFORE answering (see inbox-polling rule) |
 | "cleanup" / "clear everything" / "phase X GO" | builds a cleanup-command block |
-| "prompt for #N" / "spawn prompt for …" | builds spawn-prompt text **with the inbox closing line** |
+| "prompt for #N" / "dispatch #N" / "spawn prompt for …" | builds the dispatch (mini-)prompt that points at the issue file **with the mandatory inbox report line** |
 | "inbox snippet" | produces the boilerplate snippet for manually started chats |
-| "wave plan" / "next wave" | proposes a high-level wave plan |
+| "wave plan" / "next wave" | writes the next wave directly — the queue of issues + a dispatch prompt for each |
 | (report from a spawn chat) | updates state + names the next step |
 
 ## Workflow
@@ -161,27 +161,16 @@ What does NOT require a check: a status update the user mentions in passing (e.g
 
 Produce text output inline in the chat. No new chat needed.
 
-### When an action needs file edits (spawn-prompt build)
+### When an action needs file edits (dispatch prompt)
 
-Build a spawn prompt to this shape — **the inbox closing line is mandatory**:
+The task detail lives in an **issue file** (an `.md` spec written ahead of time), not in the prompt. The PM chat hands out a **minimal dispatch prompt** ("mini-prompt") that just points at that file and requires the inbox report — it does NOT re-explain the task:
 
 ```
-You're working on the <project> repo. Working directory: <absolute-path>.
+Working directory: <absolute-path>.
+Read and execute end to end: <workspace>/.scratch/<area>/issue-NN-<slug>.md
 
-Task: <what to do, in 1-2 sentences>
-
-Steps:
-1. <step 1>
-2. <step 2>
-…
-
-Acceptance:
-- <criterion 1>
-- <criterion 2>
-
-Write your final report to:
+When done, write your report to:
 <workspace>/.scratch/pm-inbox/<YYYY-MM-DD-HHMM>-<topic-slug>.md
-
 with frontmatter:
 ---
 topic: <short title>
@@ -193,7 +182,7 @@ worktree: <path or —>
 Body: 3-10 sentences on what was done + what's next.
 ```
 
-The user drops it into a new chat, the spawn chat executes + writes the inbox report, and the PM chat reads it automatically on the next resync/trigger.
+If no issue file exists yet, the prompt carries a one-line task instead — but the inbox report stays mandatory either way. The user drops the prompt into a new chat; the spawn chat executes and writes the inbox report; the PM chat reads it automatically on the next resync/trigger.
 
 ## PM-inbox pattern
 
@@ -245,10 +234,9 @@ The user pastes that into an already-running spawn chat as the last instruction.
 
 | Skill | Role |
 |---|---|
-| `pm` (this) | **Dispatcher** — state file, overview, instructions |
-| a planner | **Planner** — next wave as an issue list + copy-paste prompts |
-| an executor | **Executor** — inner build/TDD loop per issue |
-| a reviewer | **Reviewer** — plan stress-test against the domain |
+| `pm` (this) | **Dispatcher + planner** — state file, overview, writes the next wave + dispatch prompts |
+| an executor (spawn chat) | **Executor** — inner build/TDD loop per issue |
+| a reviewer (spawn chat) | **Reviewer** — plan stress-test against the domain |
 
 ## Safety rule
 
