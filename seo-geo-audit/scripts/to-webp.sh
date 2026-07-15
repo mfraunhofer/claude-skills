@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# seo-geo-audit — image -> responsive WebP (ffmpeg/libwebp).
+# seo-geo-audit: image -> responsive WebP (ffmpeg/libwebp).
 #
 # Produces one WebP variant per target width: <base>-<width>.webp (for a <picture>
 # srcset). With no widths: one WebP at original size (<base>.webp).

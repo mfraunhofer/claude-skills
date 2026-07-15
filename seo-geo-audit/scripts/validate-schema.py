@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-"""seo-geo-audit — JSON-LD validator.
+"""seo-geo-audit: JSON-LD validator.
 
 Extracts every <script type="application/ld+json"> block from an HTML file OR a
 URL, parses each as JSON, and lists @type. Catches the most common mistakes:
 trailing commas, broken strings, and the classic `&amp;` in JSON-LD (HTML
-entities are NOT decoded inside <script> content — it belongs as plain `&`,
+entities are NOT decoded inside <script> content, it belongs as plain `&`,
 otherwise the entity ends up literally in the schema value).
 
 Usage:
@@ -42,13 +42,13 @@ def main() -> int:
         try:
             obj = json.loads(raw)
             t = obj.get("@type", "?") if isinstance(obj, dict) else "[array]"
-            warn = f"  ! HTML entity inside JSON-LD ({', '.join(ent)}) — should be plain" if ent else ""
+            warn = f"  ! HTML entity inside JSON-LD ({', '.join(ent)}): should be plain" if ent else ""
             print(f"OK   block {i}: @type={t}{warn}")
         except json.JSONDecodeError as exc:
             bad += 1
-            print(f"FAIL block {i}: JSON error — {exc}")
+            print(f"FAIL block {i}: JSON error: {exc}")
             if ent:
-                print(f"     hint: HTML entity found ({', '.join(ent)}) — common cause.")
+                print(f"     hint: HTML entity found ({', '.join(ent)}): common cause.")
     print(f"\n{'ALL VALID' if not bad else f'{bad} INVALID'} ({len(blocks)} blocks).")
     return 1 if bad else 0
 

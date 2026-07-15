@@ -1,14 +1,14 @@
 #!/usr/bin/env bash
-# seo-geo-audit — deterministic technical audit of a LIVE site (curl-based).
+# seo-geo-audit: deterministic technical audit of a LIVE site (curl-based).
 #
 # Checks: reachability, robots.txt + AI-crawler policy, soft-404, sitemap.xml,
 # canonical/www behavior, schema presence, render-blocking JS, large images.
-# WebFetch is often blocked by bot protection (e.g. Cloudflare) — curl with a UA
+# WebFetch is often blocked by bot protection (e.g. Cloudflare): curl with a UA
 # gets around that.
 #
 # Usage: ./audit.sh <domain>        e.g. ./audit.sh example.com
 #
-# Note: intentionally NO `pipefail` — `grep -q` closes the pipe early, which would
+# Note: intentionally NO `pipefail`: `grep -q` closes the pipe early, which would
 # SIGPIPE the left-hand `echo` and falsely break the `&&/||` checks.
 set -u
 
@@ -22,7 +22,7 @@ code() { curl -sS -A "$UA" -o /dev/null -w '%{http_code}' "$@"; }
 ct() { curl -sS -A "$UA" -o /dev/null -w '%{content_type}' "$@"; }
 
 echo "════════════════════════════════════════════════════════"
-echo " SEO/GEO technical audit — $BASE"
+echo " SEO/GEO technical audit: $BASE"
 echo "════════════════════════════════════════════════════════"
 
 echo; echo "── 1. Reachability / redirects ──"
@@ -49,7 +49,7 @@ if [ -z "$ROB" ]; then echo "!   no robots.txt"; else
   echo "$ROB" | grep -qi 'cloudflare managed' && echo "i  Cloudflare 'Managed robots.txt' active (prepends its block; does NOT overwrite yours)"
   echo "Training bots (should be Disallow):"
   for b in GPTBot ClaudeBot Google-Extended CCBot Bytespider Amazonbot Applebot-Extended meta-externalagent; do
-    echo "$ROB" | grep -qi "User-agent: *$b" && st="listed" || st="—"
+    echo "$ROB" | grep -qi "User-agent: *$b" && st="listed" || st="–"
     printf '  %-20s %s\n' "$b" "$st"
   done
   echo "Search/grounding bots (MUST be allowed for AI citations):"

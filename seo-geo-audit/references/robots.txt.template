@@ -1,9 +1,9 @@
-# robots.txt — GEO-positive: block AI training bots, allow search/grounding bots
+# robots.txt: GEO-positive: block AI training bots, allow search/grounding bots
 # (ChatGPT search, Perplexity, Claude search) + classic search engines.
 #
 # Cloudflare note: while Cloudflare's "Managed robots.txt" is active, CF prepends
 # its block before this file and serves both (it does NOT overwrite). The CF block
-# usually blocks only training bots — so the policy below is often already correct.
+# usually blocks only training bots, so the policy below is often already correct.
 # For a single clean file, turn Managed robots.txt off in the dashboard.
 
 # --- Block AI training bots (content out of model weights) ---

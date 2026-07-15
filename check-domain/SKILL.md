@@ -5,7 +5,7 @@ description: Check domain availability with a whois lookup against the official 
 
 # Check Domain Availability
 
-Check whether domain names are available for registration. Uses the system `whois` command directly against official registrars for reliable results — no third-party libraries or lookup sites.
+Check whether domain names are available for registration. Uses the system `whois` command directly against official registrars for reliable results, no third-party libraries or lookup sites.
 
 ## When to use
 - Checking if a domain is available
@@ -51,6 +51,6 @@ mybrand.eu         FREE
 - Returns registration dates where the registrar exposes them
 
 ## Notes
-- Do NOT use the `python-whois` pip package for .de domains — its error text can contain `Status: free` even when the domain IS registered, and it sometimes reports registered domains as free.
-- Do NOT use third-party WHOIS sites (who.is, whois.com) — they cache results and can be wrong.
+- Do NOT use the `python-whois` pip package for .de domains: its error text can contain `Status: free` even when the domain IS registered, and it sometimes reports registered domains as free.
+- Do NOT use third-party WHOIS sites (who.is, whois.com): they cache results and can be wrong.
 - Always use the system `whois` command, which queries the official registrars directly. For .de, DENIC (whois.denic.de) is the only authoritative source; for .eu, EURid.
