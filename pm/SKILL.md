@@ -230,6 +230,10 @@ Body: 3–10 sentences on what was done + what's open.
 
 The user pastes that into an already-running spawn chat as the last instruction.
 
+## The "box" shortcut (optional hook)
+
+If the bundled `hooks/box-pm.sh` is installed as a `UserPromptSubmit` hook (see [README.md](README.md) for setup), the user can type `box <project>` in any chat to enter PM mode for that project directly: read its `pm-state.md` and active inbox reports, give the compact status, close with the one next step. A bare `box` means: infer the project from the running conversation, ask briefly when unclear. Never ask what "box" means, it is a fixed convention.
+
 ## Relation to other skills
 
 | Skill | Role |
