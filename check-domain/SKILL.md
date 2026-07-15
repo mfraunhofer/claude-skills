@@ -31,14 +31,14 @@ python3 ~/.claude/skills/check-domain/scripts/check_domain.py example.de example
 
 Check one name across all major TLDs (.de .com .eu .org .net):
 ```bash
-python3 ~/.claude/skills/check-domain/scripts/check_domain.py --all veritora
+python3 ~/.claude/skills/check-domain/scripts/check_domain.py --all mybrand
 ```
 
 Output:
 ```
-veritora.de        FREE
-veritora.com       TAKEN  (registered: 2019-06-28, expires: 2026-06-28)
-veritora.eu        FREE
+mybrand.de         FREE
+mybrand.com        TAKEN  (registered: 2019-06-28, expires: 2026-06-28)
+mybrand.eu         FREE
 ```
 
 ## How it works

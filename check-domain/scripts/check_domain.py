@@ -5,7 +5,7 @@ Queries official registrars directly -- no third-party libraries or lookup sites
 
 Usage:
     python3 check_domain.py example.de example.com
-    python3 check_domain.py --all veritora        # checks .de .com .eu .org .net
+    python3 check_domain.py --all mybrand         # checks .de .com .eu .org .net
 """
 
 import subprocess
